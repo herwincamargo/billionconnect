@@ -12,6 +12,9 @@ $has_daily = !empty($variations['daily']);
 $has_total = !empty($variations['total']);
 $flag_url = get_post_meta($product->get_id(), '_esim_country_flag_url', true);
 ?>
+<script>
+    window.productVariations = <?php echo json_encode($variations); ?>;
+</script>
 
 <div class="cp-product-interface" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
     

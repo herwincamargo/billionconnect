@@ -33,53 +33,15 @@
             this.$message = $('.cp-message');
             
             this.productId = this.$container.data('product-id');
-            this.allVariations = this.buildVariationsMap();
-        },
-        
-        buildVariationsMap: function() {
-            const map = {
-                daily: {},
-                total: {}
-            };
-            
-            // Build from daily plans
-            $('.cp-plan-section[data-plan-type="daily"] .cp-data-btn').each(function() {
-                const dataKey = $(this).data('data-key');
-                const planType = 'daily';
-                
-                if (!map[planType][dataKey]) {
-                    map[planType][dataKey] = {};
-                }
-                
-                // Get durations for this data type from buttons
-                $('.cp-plan-section[data-plan-type="daily"] .cp-duration-btn').each(function() {
-                    const copies = $(this).data('copies');
-                    map[planType][dataKey][copies] = {
-                        variation_id: $(this).data('variation-id'),
-                        price: $(this).data('price')
-                    };
-                });
-            });
-            
-            // Build from total plans
-            $('.cp-plan-section[data-plan-type="total"] .cp-data-btn').each(function() {
-                const dataKey = $(this).data('data-key');
-                const planType = 'total';
-                
-                if (!map[planType][dataKey]) {
-                    map[planType][dataKey] = {};
-                }
-            });
-            
-            return map;
+            this.allVariations = window.productVariations || { daily: {}, total: {} };
         },
         
         bindEvents: function() {
             if (!this.$container.length) return;
             
             this.$tabs.on('click', this.handleTabClick.bind(this));
-            this.$dataButtons.on('click', this.handleDataClick.bind(this));
-            this.$durationButtons.on('click', this.handleDurationButtonClick.bind(this));
+            this.$container.on('click', '.cp-data-btn', this.handleDataClick.bind(this));
+            this.$container.on('click', '.cp-duration-btn', this.handleDurationButtonClick.bind(this));
             this.$qtyMinus.on('click', this.decrementQuantity.bind(this));
             this.$qtyPlus.on('click', this.incrementQuantity.bind(this));
             this.$qtyInput.on('change', this.updatePrice.bind(this));
@@ -118,16 +80,25 @@
         },
         
         updateDurationsForData: function(planType, dataKey) {
-            // This is a simplified version
-            // In reality, we need to rebuild options based on selected data
+            const durations = this.allVariations[planType][dataKey].durations;
+            const $durationContainer = $(`.cp-plan-section[data-plan-type="${planType}"] .cp-duration-buttons`);
             
-            if (planType === 'daily') {
-                // For dropdown, keep same options but update variation IDs
-                // (In real implementation, fetch from variations map)
-            } else {
-                // For buttons, update based on selected data
-                // (In real implementation, rebuild buttons)
+            $durationContainer.empty();
+
+            if (durations && durations.length > 0) {
+                durations.forEach((duration, index) => {
+                    const $btn = $('<button>', {
+                        type: 'button',
+                        class: 'cp-duration-btn' + (index === 0 ? ' active' : ''),
+                        'data-variation-id': duration.variation_id,
+                        'data-price': duration.price,
+                        'data-copies': duration.copies,
+                        text: duration.copies
+                    });
+                    $durationContainer.append($btn);
+                });
             }
+
         },
         
         
@@ -135,7 +106,7 @@
             const $btn = $(e.currentTarget);
             
             // Update active state
-            this.$durationButtons.removeClass('active');
+            $btn.siblings().removeClass('active');
             $btn.addClass('active');
             
             this.updatePrice();
@@ -162,8 +133,9 @@
         },
         
         getCurrentSelection: function() {
-            const activeTab = this.$tabs.filter('.active').data('type') || 'daily';
-            const $activeDurationBtn = this.$durationButtons.filter('.active');
+            const activeTab = this.$tabs.filter('.active').data('type') || (this.allVariations.daily ? 'daily' : 'total');
+            const $activeSection = $(`.cp-plan-section[data-plan-type="${activeTab}"]`);
+            const $activeDurationBtn = $activeSection.find('.cp-duration-btn.active');
             
             const variationId = $activeDurationBtn.data('variation-id');
             const price = $activeDurationBtn.data('price');

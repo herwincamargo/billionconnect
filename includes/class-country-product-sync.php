@@ -23,9 +23,9 @@ class Connectivity_Plans_Country_Product_Sync {
             foreach ($countries_response['tradeData'] as $country) {
                 $countries_map[$country['mcc']] = $country;
             }
-            error_log("F001: Se obtuvieron " . count($countries_map) . " países con sus datos.");
+            error_log("F001: Successfully fetched " . count($countries_map) . " countries with their data.");
         } else {
-            error_log("F001: No se pudo obtener la lista de países. Se continuará sin banderas.");
+            error_log("F001: Could not fetch the country list. Proceeding without flag URLs.");
         }
         
         // Obtener planes
