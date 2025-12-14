@@ -10,7 +10,16 @@
         
         init: function() {
             this.cacheDom();
+            if (!this.$container.length) {
+                return;
+            }
             this.bindEvents();
+
+            const initialTabType = this.$tabs.filter('.active').data('type');
+            if (initialTabType) {
+                this.resetSelection(initialTabType);
+            }
+
             this.initializePrice();
         },
         
