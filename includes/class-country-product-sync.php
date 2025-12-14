@@ -249,11 +249,6 @@ class Connectivity_Plans_Country_Product_Sync {
             return $this->create_country_product($country_name, $country_data);
         }
     }
-    
-    /**
-     * Traducir nombre de país/región de la API a español
-     * La API ya agrupa los productos, solo traducimos el nombre para mostrarlo
-     */
     private function translate_country_name($country_name) {
         $translations = array(
             // Regiones multi-país (tal como vienen de la API)
@@ -444,9 +439,10 @@ class Connectivity_Plans_Country_Product_Sync {
         try {
             // CREAR PRODUCTO VARIABLE (no simple)
             $product = new WC_Product_Variable();
-            
-            // USAR NOMBRE EXACTO DE LA API (SIN traducir)
-            $product_title = $country_name . ' eSIM';
+
+            // Traducir el nombre del país para el título del producto
+            $translated_name = $this->translate_country_name($country_name);
+            $product_title = $translated_name . ' eSIM';
             
             $product->set_name($product_title);
             $product->set_status('publish');
@@ -532,10 +528,14 @@ class Connectivity_Plans_Country_Product_Sync {
             if (!$product) {
                 return array('success' => false, 'error' => 'Product not found');
             }
+
+            // Traducir el nombre del país para el título del producto
+            $translated_name = $this->translate_country_name($country_name);
+            $product_title = $translated_name . ' eSIM';
+            $product->set_name($product_title);
             
-            // USAR NOMBRE EXACTO DE LA API (sin traducir)
             // Actualizar descripciones
-            $description = $this->build_product_description($country_name, $country_data);
+            $description = $this->build_product_description($translated_name, $country_data);
             $product->set_description($description);
             
             $short_desc = $this->build_short_description($country_name, $country_data);
@@ -862,6 +862,8 @@ class Connectivity_Plans_Country_Product_Sync {
         
         foreach ($total_packages as $plan) {
             $capacity_gb = $this->format_capacity_to_gb($plan['capacity'] ?? '0');
+            if (!$capacity_gb) continue; // Ignorar planes con 0GB
+
             $capacity_kb = floatval($plan['capacity'] ?? '0');
             error_log("Paquete Total - Capacidad: $capacity_gb ($capacity_kb KB)");
             if ($capacity_gb && !isset($all_data_options[$capacity_gb])) {
@@ -887,6 +889,8 @@ class Connectivity_Plans_Country_Product_Sync {
         
         foreach ($daily_passes as $plan) {
             $high_flow = $this->format_capacity_to_gb($plan['highFlowSize'] ?? '0');
+            if (!$high_flow) continue; // Ignorar planes con 0GB
+
             $high_flow_kb = floatval($plan['highFlowSize'] ?? '0');
             error_log("Pase Diario - High Flow: $high_flow ($high_flow_kb KB)");
             $data_label = $high_flow . '/día';
@@ -1183,7 +1187,7 @@ class Connectivity_Plans_Country_Product_Sync {
         $kb = floatval($capacity_kb);
         
         if ($kb <= 0) {
-            return '0GB';
+            return false;
         }
         
         // Convertir KB a GB

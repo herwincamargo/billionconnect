@@ -82,7 +82,7 @@
         updateDurationsForData: function(planType, dataKey) {
             const durations = this.allVariations[planType][dataKey].durations;
             const $durationContainer = $(`.cp-plan-section[data-plan-type="${planType}"] .cp-duration-buttons`);
-            
+
             $durationContainer.empty();
 
             if (durations && durations.length > 0) {
@@ -162,13 +162,17 @@
         },
         
         resetSelection: function(type) {
-            if (type === 'daily') {
-                $('.cp-data-btn[data-plan-type="daily"]').first().addClass('active');
-                this.$durationSelect.prop('selectedIndex', 0);
-            } else {
-                $('.cp-data-btn[data-plan-type="total"]').first().addClass('active');
-                this.$durationButtons.removeClass('active').first().addClass('active');
+            // Activa el primer botón de datos de la pestaña activa
+            const $firstDataBtn = $(`.cp-data-btn[data-plan-type="${type}"]`).first();
+            $(`.cp-data-btn[data-plan-type="${type}"]`).removeClass('active');
+            $firstDataBtn.addClass('active');
+
+            // Actualiza las duraciones para el primer botón de datos
+            const dataKey = $firstDataBtn.data('data-key');
+            if (dataKey) {
+                this.updateDurationsForData(type, dataKey);
             }
+
             this.$qtyInput.val(1);
         },
         
