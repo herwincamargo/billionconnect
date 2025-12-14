@@ -131,8 +131,8 @@ class Connectivity_Plans_API_Client {
      */
     public function get_plans_prices() {
         return $this->request('F003', array(
-            'salesMethod' => '1',  // SIEMPRE retail para ver precios
-            'language' => $this->language  // 2 = English
+            'salesMethod' => $this->sales_method,
+            'language' => $this->language
         ));
     }
 
