@@ -72,7 +72,7 @@ class Connectivity_Plans_API_Client {
                 'x-sign-method' => 'md5',               // método de firma
                 'x-sign-value' => $signature            // firma MD5
             ),
-            'timeout' => 30,
+            'timeout' => 120,
             'sslverify' => true
         );
         
