@@ -1,0 +1,304 @@
+/**
+ * Custom Product Interface Styles
+ * Based on the design from uploaded images
+ */
+
+.cp-product-interface {
+    position: relative;
+    margin: 20px 0;
+}
+
+/* Tabs */
+.cp-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cp-tab {
+    flex: 1;
+    padding: 15px 20px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.cp-tab:hover {
+    border-color: #0073aa;
+    background: #f0f8ff;
+}
+
+.cp-tab.active {
+    background: #0073aa !important;
+    border-color: #0073aa !important;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+/* Selection Box */
+.cp-selection-box {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 30px;
+    background: #fff;
+}
+
+.cp-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 15px 0;
+    color: #333;
+}
+
+.cp-section-title:first-child {
+    margin-top: 0;
+}
+
+/* Data Options */
+.cp-data-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cp-data-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.cp-data-btn {
+    padding: 15px 20px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.cp-data-btn:hover {
+    border-color: #0073aa;
+    background: #f0f8ff;
+}
+
+.cp-data-btn.active {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
+/* Duration Select (for daily plans) */
+
+/* Duration Buttons (for all plans) */
+.cp-duration-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cp-duration-btn {
+    padding: 15px 25px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.cp-duration-btn:hover {
+    border-color: #0073aa;
+    background: #f0f8ff;
+}
+
+.cp-duration-btn.active {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
+/* Quantity */
+.cp-quantity-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 20px;
+    max-width: 300px;
+}
+
+.cp-qty-btn {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    font-size: 24px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.cp-qty-minus {
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+.cp-qty-plus {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+
+.cp-qty-btn:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.cp-quantity-input {
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    border: 2px solid #e0e0e0;
+    border-left: none;
+    border-right: none;
+    font-size: 18px;
+    font-weight: 500;
+    -moz-appearance: textfield;
+}
+
+.cp-quantity-input::-webkit-outer-spin-button,
+.cp-quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Add to Cart Button */
+.cp-add-to-cart-btn {
+    width: 100%;
+    padding: 18px 30px;
+    background: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.cp-add-to-cart-btn:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+}
+
+.cp-add-to-cart-btn:active {
+    transform: translateY(0);
+}
+
+.cp-price-display {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.cp-btn-text {
+    font-size: 18px;
+}
+
+/* Loading */
+.cp-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    z-index: 10;
+}
+
+.cp-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #e53935;
+    border-radius: 50%;
+    animation: cp-spin 1s linear infinite;
+}
+
+@keyframes cp-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Messages */
+.cp-message {
+    margin: 15px 0;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.cp-message.success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.cp-message.error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* Hide default WooCommerce elements */
+.cp-product-interface ~ .variations_form .variations,
+.cp-product-interface ~ .variations_form .single_variation_wrap {
+    display: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cp-tabs {
+        flex-direction: column;
+    }
+    
+    .cp-data-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cp-selection-box {
+        padding: 20px;
+    }
+    
+    .cp-data-btn,
+    .cp-duration-btn {
+        font-size: 14px;
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cp-data-grid {
+        grid-template-columns: 1fr;
+    }
+}
