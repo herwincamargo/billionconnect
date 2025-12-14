@@ -22,7 +22,7 @@ class Connectivity_Plans_API_Client {
         $this->api_url = get_option('connectivity_plans_api_url', 'https://api-flow.billionconnect.com/Flow/saler/2.0/invoke');
         $this->api_key = get_option('connectivity_plans_api_partner', '');
         $this->api_secret = get_option('connectivity_plans_api_secret', '');
-        $this->sales_method = get_option('connectivity_plans_sales_method', '1');
+        $this->sales_method = get_option('connectivity_plans_sales_method', '5');
         $this->language = get_option('connectivity_plans_api_language', '2'); // Default: English
     }
     
