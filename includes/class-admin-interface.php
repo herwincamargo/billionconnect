@@ -179,29 +179,6 @@ class Connectivity_Plans_Admin_Interface {
             
             <div class="cp-dashboard-grid">
                 
-                <?php
-                // Verificar si está en modo demo
-                $demo_mode = get_transient('connectivity_plans_demo_mode');
-                if ($demo_mode):
-                ?>
-                <div class="cp-card" style="grid-column: 1 / -1; border-left: 4px solid #ff9800;">
-                    <h2>⚠️ MODO DE PRUEBA ACTIVADO</h2>
-                    <div class="cp-status cp-status-warning">
-                        <span class="dashicons dashicons-warning"></span>
-                        <div>
-                            <strong>Los precios son FICTICIOS - Solo para testing</strong>
-                            <p style="margin: 10px 0 0 0;">
-                                F003 (pricing) no está devolviendo datos. El plugin generó precios de prueba 
-                                para que veas cómo funciona la estructura de productos.
-                            </p>
-                            <p style="margin: 10px 0 0 0;">
-                                <strong>Acción requerida:</strong> Contacta a Billionconnect para habilitar F003 en tu cuenta 
-                                antes de usar en producción.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
                 
                 <!-- Card: Estado -->
                 <div class="cp-card">
