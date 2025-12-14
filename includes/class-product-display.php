@@ -122,7 +122,7 @@ class Connectivity_Plans_Product_Display {
                 );
             }
             
-            $organized[$type_key][$data_label]['durations'][$copies] = array(
+            $organized[$type_key][$data_label]['durations'][] = array(
                 'variation_id' => $variation['variation_id'],
                 'sku_id' => $sku_id,
                 'copies' => $copies,
@@ -130,11 +130,13 @@ class Connectivity_Plans_Product_Display {
                 'label' => intval($copies) === 1 ? '1 día' : intval($copies) . ' días'
             );
         }
-        
+
         // Sort durations numerically (smallest to largest)
-        foreach ($organized as $type => $data_plans) {
-            foreach ($data_plans as $data_key => $plan_data) {
-                ksort($organized[$type][$data_key]['durations'], SORT_NUMERIC);
+        foreach ($organized as $type => &$data_plans) {
+            foreach ($data_plans as $data_key => &$plan_data) {
+                usort($plan_data['durations'], function($a, $b) {
+                    return intval($a['copies']) <=> intval($b['copies']);
+                });
             }
         }
         
