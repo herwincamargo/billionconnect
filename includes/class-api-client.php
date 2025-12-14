@@ -135,6 +135,17 @@ class Connectivity_Plans_API_Client {
             'language' => $this->language  // 2 = English
         ));
     }
+
+    /**
+     * F001 - Obtener lista de países
+     */
+    public function get_countries() {
+        $params = array(
+            'salesMethod' => $this->sales_method,
+            'language' => $this->language
+        );
+        return $this->request('F001', $params);
+    }
     
     /**
      * F040 - Crear orden eSIM (CRÍTICO)

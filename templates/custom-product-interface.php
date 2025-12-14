@@ -10,10 +10,18 @@ if (!defined('ABSPATH')) exit;
 
 $has_daily = !empty($variations['daily']);
 $has_total = !empty($variations['total']);
+$flag_url = get_post_meta($product->get_id(), '_esim_country_flag_url', true);
 ?>
 
 <div class="cp-product-interface" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
     
+    <div class="cp-product-header">
+        <?php if ($flag_url): ?>
+            <img src="<?php echo esc_url($flag_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>" class="cp-country-flag">
+        <?php endif; ?>
+        <h2 class="cp-product-title"><?php echo esc_html($product->get_name()); ?></h2>
+    </div>
+
     <?php if ($has_daily && $has_total): ?>
     <!-- Tabs for planType selection -->
     <div class="cp-tabs">
