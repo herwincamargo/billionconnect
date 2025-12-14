@@ -15,6 +15,18 @@ class Connectivity_Plans_Country_Product_Sync {
         ini_set('memory_limit', '1024M');
         
         error_log("=== INICIANDO SINCRONIZACIÓN POR PAÍS ===");
+
+        // 1. Obtener lista de países con banderas (F001)
+        $countries_response = $this->api_client->get_countries();
+        $countries_map = array();
+        if (!is_wp_error($countries_response) && ($countries_response['tradeCode'] ?? '') === '1000') {
+            foreach ($countries_response['tradeData'] as $country) {
+                $countries_map[$country['mcc']] = $country;
+            }
+            error_log("F001: Successfully fetched " . count($countries_map) . " countries with their data.");
+        } else {
+            error_log("F001: Could not fetch the country list. Proceeding without flag URLs.");
+        }
         
         // Obtener planes
         $plans_response = $this->api_client->get_plans();
@@ -84,7 +96,7 @@ class Connectivity_Plans_Country_Product_Sync {
         error_log("=============================");
         
         // Agrupar planes por país
-        $plans_by_country = $this->group_plans_by_country($plans_response['tradeData'] ?? array(), $prices_map);
+        $plans_by_country = $this->group_plans_by_country($plans_response['tradeData'] ?? array(), $prices_map, $countries_map);
         
         error_log("Países encontrados: " . count($plans_by_country));
         
@@ -153,11 +165,18 @@ class Connectivity_Plans_Country_Product_Sync {
         return $demo_prices;
     }
     
-    private function group_plans_by_country($plans, $prices_map) {
+    private function group_plans_by_country($plans, $prices_map, $countries_map) {
         $grouped = array();
         
         foreach ($plans as $plan) {
             $countries = $plan['country'] ?? array();
+
+            // Enriquecer los datos de los países con la información de F001 (banderas)
+            foreach ($countries as $i => $country) {
+                if (isset($countries_map[$country['mcc']])) {
+                    $countries[$i]['url'] = $countries_map[$country['mcc']]['url'];
+                }
+            }
             
             if (empty($countries)) {
                 continue;
@@ -785,6 +804,11 @@ class Connectivity_Plans_Country_Product_Sync {
         
         // Información de países
         update_post_meta($product_id, '_esim_countries', json_encode($country_data['countries']));
+
+        // Guardar la bandera del primer país como la bandera principal del producto
+        if (!empty($country_data['countries'][0]['url'])) {
+            update_post_meta($product_id, '_esim_country_flag_url', $country_data['countries'][0]['url']);
+        }
         
         // Timestamp
         update_post_meta($product_id, '_esim_last_sync', current_time('mysql'));
