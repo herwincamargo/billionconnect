@@ -126,12 +126,12 @@ class Connectivity_Plans_API_Client {
     
     /**
      * F003 - Obtener precios de planes
-     * IMPORTANTE: Siempre usa salesMethod=1 (retail) para obtener precios base
-     * El salesMethod real del distribuidor se usa solo en F052 (crear orden)
+     * CRÍTICO: Debe usar salesMethod '5' (distribución) para obtener los precios correctos del partner.
+     * Usar '1' (retail) puede no devolver precios y activar el modo de prueba.
      */
     public function get_plans_prices() {
         return $this->request('F003', array(
-            'salesMethod' => $this->sales_method,
+            'salesMethod' => '5', // Forzar '5' para asegurar precios de distribución
             'language' => $this->language
         ));
     }
