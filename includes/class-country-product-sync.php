@@ -651,28 +651,82 @@ class Connectivity_Plans_Country_Product_Sync {
         $html .= '<h3>📊 Tipos de Planes Disponibles</h3>';
         
         if ($has_packages) {
+            // Generar dinámicamente las opciones de GB y días
+            $total_data_options = [];
+            $total_days_options = [];
+
+            foreach ($country_data['total_packages'] as $plan) {
+                $capacity_kb = floatval($plan['capacity'] ?? '0');
+                if ($capacity_kb > 0) {
+                    $total_data_options[$capacity_kb] = $this->format_capacity_to_gb($capacity_kb);
+                }
+
+                foreach ($plan['prices'] ?? [] as $price) {
+                    $copies = intval($price['copies'] ?? 0);
+                    if ($copies > 0) {
+                        $total_days_options[$copies] = $copies;
+                    }
+                }
+            }
+
+            ksort($total_data_options, SORT_NUMERIC);
+            ksort($total_days_options, SORT_NUMERIC);
+
+            $data_string = implode(', ', array_unique(array_values($total_data_options)));
+            $days_string = implode(', ', array_map(function($day) { return $day . ' días'; }, array_unique($total_days_options)));
+
             $html .= '<div class="plan-type-card">';
             $html .= '<h4>📦 Paquetes Totales</h4>';
             $html .= '<p><strong>Flexibilidad Total:</strong> Elige la cantidad de GB y los días de validez. Usa tus datos como quieras, cuando quieras.</p>';
             $html .= '<ul>';
-            $html .= '<li>✅ Elige tus GB (1GB, 3GB, 5GB, 10GB, 20GB, 50GB)</li>';
-            $html .= '<li>✅ Elige tus días (7, 15, 30, 60, 90 días)</li>';
+            if (!empty($data_string)) {
+                $html .= '<li>✅ Elige tus GB (' . esc_html($data_string) . ')</li>';
+            }
+            if (!empty($days_string)) {
+                $html .= '<li>✅ Elige tus días (' . esc_html($days_string) . ')</li>';
+            }
             $html .= '<li>✅ Usa los datos a tu ritmo</li>';
             $html .= '<li>✅ Ideal para viajes cortos con uso variable</li>';
             $html .= '</ul>';
-        
-
             $html .= '</div>';
         }
         
         if ($has_passes) {
+            // Generar dinámicamente las opciones de GB/día y duración
+            $daily_data_options = [];
+            $daily_days_options = [];
+
+            foreach ($country_data['daily_passes'] as $plan) {
+                $high_flow_kb = floatval($plan['highFlowSize'] ?? '0');
+                if ($high_flow_kb > 0) {
+                    $daily_data_options[$high_flow_kb] = $this->format_capacity_to_gb($high_flow_kb) . '/día';
+                }
+
+                foreach ($plan['prices'] ?? [] as $price) {
+                    $copies = intval($price['copies'] ?? 0);
+                    if ($copies > 0) {
+                        $daily_days_options[$copies] = $copies;
+                    }
+                }
+            }
+
+            ksort($daily_data_options, SORT_NUMERIC);
+            ksort($daily_days_options, SORT_NUMERIC);
+
+            $data_string = implode(', ', array_unique(array_values($daily_data_options)));
+            $days_string = implode(', ', array_map(function($day) { return $day . ' días'; }, array_unique($daily_days_options)));
+
             $html .= '<div class="plan-type-card">';
             $html .= '<h4>🔄 Pases Diarios</h4>';
             $html .= '<p><strong>Renovación Diaria:</strong> Recibe una cantidad fija de GB cada día. Perfecto para uso constante.</p>';
             $html .= '<ul>';
             $html .= '<li>✅ GB diarios que se renuevan automáticamente</li>';
-            $html .= '<li>✅ Disponible en 500MB/día, 1GB/día, 2GB/día, 5GB/día</li>';
-            $html .= '<li>✅ Elige la duración (7, 15, 30, 60 días)</li>';
+            if (!empty($data_string)) {
+                $html .= '<li>✅ Disponible en ' . esc_html($data_string) . '</li>';
+            }
+            if (!empty($days_string)) {
+                $html .= '<li>✅ Elige la duración (' . esc_html($days_string) . ')</li>';
+            }
             $html .= '<li>✅ Ideal para viajes largos con uso predecible</li>';
             $html .= '</ul>';
             $html .= '</div>';
